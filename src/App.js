@@ -15,7 +15,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      break: 1,
+      break: 5,
       session:25,
       minutos: 25,
       segundos: 0,
@@ -32,7 +32,7 @@ componentDidUpdate(prevProps,prevState){
 
     if(running===false){
 
-      if(this.state.break >= 1){
+      if(this.state.break >= 1 && this.state.break <60){
   
         this.setState({
           break: this.state.break + 1
@@ -56,7 +56,7 @@ componentDidUpdate(prevProps,prevState){
   plusOneMinutos = ()=>{
     if(running===false){
 
-      if(this.state.minutos >= 1){
+      if(this.state.minutos >= 1 && this.state.minutos <60){
         this.setState({
           minutos: this.state.minutos + 1,
           session: this.state.session  +1 
