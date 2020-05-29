@@ -11,7 +11,7 @@ class MainTimer extends Component {
       <span className="mainTimmer">
         <span>{current}</span>
         <span>
-          {minutes}:{segundos}
+          {minutes < 10 ? `0${minutes}` : minutes}:{segundos < 10 ? `0${segundos}`:segundos}
         </span>
       </span>
     );

@@ -1,13 +1,15 @@
 .App {
   text-align: center;
+  padding: 10% 0;
 }
 
 .control{
   display: flex;
   justify-content: space-evenly;
-  background-color: azure;
   max-width: 70vw;
-  margin: auto;
+  margin: 3% auto;
+  font-size: 1.4  em;
+
 }
 
 .arrow {
@@ -26,8 +28,41 @@
 .mainTimmer{
   display: flex;
   flex-direction: column;
-  border: 1px black solid;
-  max-width: 20%;
+  border: 3px black solid;
+  padding: 15px 0;
+  width: 20%;
+  min-height: 20%;
   margin: 2% auto 1% auto;
-  border-radius: 10px;
+  border-radius: 15px;
+}
+
+.mainTimmer span {
+  font-size: 1.3rem;
+  margin: 2% 0;
+}
+
+
+@media screen and  (min-width : 319px) and (max-width:750px){
+  .App{
+    padding: 12% 0;
+  }
+  .control{
+    flex-direction: column;
+    margin: 0
+  }
+
+  .sessionControl, .breakControl{
+    width: 100vw;
+    margin: 10px 0;
+  }
+  .arrow{
+    size: 20px;
+  }
+  .mainTimmer{
+    margin-top:20px;
+    width: 30%;
+  }
+  .playPauseReset .controls{
+    margin: 20px 18px;
+  }
 }

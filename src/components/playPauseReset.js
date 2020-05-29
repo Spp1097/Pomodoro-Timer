@@ -13,11 +13,14 @@ class PlayPauseReset extends Component {
         this.state = {  }
     }
     render() { 
-        const {reset,play} = this.props;
+        const {reset,play,pause} = this.props;
         return ( 
-            <div>
-                <FontAwesomeIcon icon={faPlay} className='controls' onClick={play} />
-                <FontAwesomeIcon icon={faPause} className='controls'/>
+            <div className='playPauseReset'>
+                <span className="playButton">
+                <FontAwesomeIcon id='play' icon={faPlay} className='controls on' onClick={play}  />
+
+                </span>
+                <FontAwesomeIcon icon={faPause} className='controls' onClick={pause}/>
                 <FontAwesomeIcon icon={faSyncAlt} className='controls' onClick={reset}/>
             </div>
 

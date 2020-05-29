@@ -4,16 +4,21 @@ import Titulo from "./components/title";
 import Settings from "./components/settings";
 import MainTimmer from './components/timer'
 import PlayPauseReset from './components/playPauseReset'
-import { faPause } from "@fortawesome/free-solid-svg-icons";
+import beep from './sounds/beep-01a.mp3';
+
+ 
+var startTimer;
+let running = false;
+
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      break: 5,
+      break: 1,
       session:25,
       minutos: 25,
-      segundos: '00',
+      segundos: 0,
       change:true,
       current: 'Session'
      
@@ -24,91 +29,141 @@ componentDidUpdate(prevProps,prevState){
 }
 
   plusOneBreak = ()=>{
-    if(this.state.break >= 1){
 
-      this.setState({
-        break: this.state.break + 1
-      })
-     
+    if(running===false){
+
+      if(this.state.break >= 1){
+  
+        this.setState({
+          break: this.state.break + 1
+        })
+       
+      }
     }
   }
   lessOneBreak = ()=>{
-    if(this.state.break > 1){
+    if(running===false){
 
-      this.setState({
-        break: this.state.break - 1
-      })
+      if(this.state.break > 1){
+  
+        this.setState({
+          break: this.state.break - 1
+        })
+      }
+      
     }
-    
   }
   plusOneMinutos = ()=>{
-    if(this.state.minutos >= 1){
-      this.setState({
-        minutos: this.state.minutos + 1,
-        session: this.state.session  +1 
-      })
+    if(running===false){
 
+      if(this.state.minutos >= 1){
+        this.setState({
+          minutos: this.state.minutos + 1,
+          session: this.state.session  +1 
+        })
+  
+      }
+     
     }
-   
   }
   lessOneMinutos = ()=>{
-    if(this.state.minutos > 1){
+    if(running===false){
 
-      this.setState({
-        minutos: this.state.minutos - 1,
-        session: this.state.session -1 
-      })
+      if(this.state.minutos > 1){
+  
+        this.setState({
+          minutos: this.state.minutos - 1,
+          session: this.state.session -1 
+        })
+      }
+      
     }
-    
   }
 
   reset = () =>{
+    clearInterval(startTimer)
     this.setState({
-      minutos:25,
-      segundos:'00',
-      auxSegundos:'00'
+      minutos:this.state.session,
+      current: 'Session',
+      segundos: 0
+      
     })
+    running=false;
+
+    if(!document.querySelector('#play').classList.contains("on")){
+      document.querySelector('#play').classList.add("on");
+      document.querySelector('#play').style.cursor = 'pointer';
+      
+    }
   }
   play =()=>{
-    this.setState({
-      segundos:59,
-      minutos: this.state.minutos -1});
+  
+   if(document.querySelector('#play').classList.contains("on")===true){
 
-    setInterval(()=>{
-      if(this.state.segundos>0){
+     if(this.state.session===this.state.minutos){
+ 
+       this.setState({
+         segundos:59,
+         minutos: this.state.minutos -1});
+     }
+ 
+    startTimer =  setInterval(()=>{
+      
+       if(this.state.segundos>0){
+          this.setState({
+            segundos : this.state.segundos -1 
+          })
+       }
+       else{
          this.setState({
-           segundos : this.state.segundos -1 
+           segundos: 59,
+           minutos : this.state.minutos -1 
          })
-      }
-      else{
-        this.setState({
-          segundos: 59,
-          minutos : this.state.minutos -1 
-        })
-      }
-      if(this.state.minutos===0 && this.state.segundos===0){
-        if(this.state.change===true){
-          this.setState({
-            current: 'Break',
-            minutos: this.state.break-1,
-            segundos : 59,
-            change: false
-          })
-        }else{
-          this.setState({
-            current: 'Session',
-            minutos: this.state.session-1,
-            segundos : 59,
-            change:true
-          })
-        }
-      }
-      
-      
-      
-    },100)
+       }
+       if(this.state.minutos===0 && this.state.segundos===0){
+                       
+           if(this.state.change===true){
+             this.setState({
+               current: 'Break',
+               minutos: this.state.break-1,
+               segundos : 59,
+               change: false
+               
+             })
+           }else{
+             this.setState({
+               current: 'Session',
+               minutos: this.state.session-1,
+               segundos : 59,
+               change:true
+             })
+           }
+           document.getElementById('beep').play();
+           
+           
+         
+       }
+       
+       
+       
+       
+     },1000)
+
+   }
+    running=true;
+    document.querySelector('#play').classList.remove("on");
+    document.querySelector('#play').style.cursor = 'default';
+   
 
    
+  }
+
+  pauseTimer = () =>{
+    clearInterval(startTimer);
+    document.querySelector('#play').classList.add("on");
+    document.querySelector('#play').style.cursor = 'pointer';
+   
+
   }
 
   render() {
@@ -125,7 +180,8 @@ componentDidUpdate(prevProps,prevState){
         />
         <MainTimmer minutes = {this.state.minutos} segundos={this.state.segundos}
          current = {this.state.current}/>
-        <PlayPauseReset reset = {this.reset} play = {this.play}/>
+        <PlayPauseReset reset = {this.reset} play = {this.play} pause = {this.pauseTimer}/>
+        <audio  id ='beep' src={beep}></audio>
       </div>
     );
   }
